@@ -1,0 +1,607 @@
+:root {
+  /* Thème sombre par défaut */
+  --primary-color: #c678dd;
+  --secondary-color: #c68fcb;
+  --background-color: #1b1b1b;
+  --text-color: #d4d4d4;
+  --border-color: #2d2d2d;
+  --card-background: #252526;
+  --error-color: #f14c4c;
+  --node-color: #c678dd;
+  --node-border-color: #d7a1e6;
+  --link-color: #89ddff;
+  --link-secondary-color: #569cd6;
+  --block-bg-color: #733d8e;
+  --block-text-color: #d4d4d4;
+}
+
+/* Thème clair activable avec .light-theme sur body ou #root */
+.light-theme {
+  --primary-color: #2563eb;
+  --secondary-color: #10b981;
+  --background-color: #f7fafc;
+  --text-color: #1a202c;
+  --border-color: #e2e8f0;
+  --card-background: #fff;
+  --error-color: #e57373;
+  --node-color: #2563eb;
+  --node-border-color: #7dd3fc;
+  --link-color: #2563eb;
+  --link-secondary-color: #10b981;
+  --block-bg-color: #f1f5f9;
+  --block-text-color: #1a202c;
+}
+.light-theme .title{
+  color: black;
+}
+.light-theme .app-container,
+.light-theme .blockchain-explorer,
+.light-theme .toolbar,
+.light-theme .latest-blocks-table,
+.light-theme .modal,
+.light-theme .block-details-root {
+  background: #fdfcf9 !important;
+  color: #1a202c;
+  border: 1px solid #e2e8f0;
+}
+
+.light-theme .table-header {
+  background: #f7fafc;
+  color: #1a202c;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.light-theme .table-row {
+  background: #fff;
+}
+
+.light-theme .table-row:nth-child(even) {
+  background: #f1f5f9;
+}
+
+.light-theme .visualization-title,
+.light-theme .block-details-title {
+  color: #2563eb;
+}
+
+.light-theme button {
+  background: linear-gradient(90deg, #e0f2fe 60%, #f7fafc 100%);
+  color: #1a202c;
+  border: 1px solid #bae6fd;
+}
+
+.light-theme button:focus {
+  outline: 2px solid #2563eb;
+}
+
+.light-theme button:hover {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+
+.light-theme .watchlisted-block {
+  background: #e6fffa !important;
+}
+
+.light-theme a,
+.light-theme .refresh-interval-value {
+  color: #2563eb;
+}
+
+.light-theme a:hover {
+  color: #10b981;
+  text-decoration: underline;
+}
+
+.light-theme .error-message {
+  background: #fff2f2;
+  color: #c62828;
+  border-left: 4px solid #e57373;
+}
+
+.light-theme .block-details-root,
+.light-theme .modal {
+  box-shadow: 0 2px 16px #e2e8f077;
+}
+
+
+.light-theme .blockchain-explorer,
+.light-theme .toolbar,
+.light-theme .latest-blocks-table,
+.light-theme .modal,
+.light-theme .block-details-root {
+  background: #fff !important;
+  color: #23213a;
+  border: 1px solid #e1e5ef;
+}
+
+.light-theme .table-header {
+  background: #f7f7fb;
+  color: #23213a;
+  border-bottom: 1px solid #e1e5ef;
+}
+
+.light-theme .table-row {
+  background: #fff;
+}
+
+.light-theme .table-row:nth-child(even) {
+  background: #f7f7fb;
+}
+
+.light-theme .visualization-title,
+.light-theme .block-details-title {
+  color: #6b3be4;
+}
+
+.light-theme button {
+  background: linear-gradient(90deg, #e3e6ef 60%, #f7f7fb 100%);
+  color: #23213a;
+  border: 1px solid #d4d9e3;
+}
+
+.light-theme button:focus {
+  outline: 2px solid #2db2ff;
+}
+
+.light-theme button:hover {
+  background: #e9e6fa;
+  color: #6b3be4;
+}
+
+.light-theme .watchlisted-block {
+  background: #e7f3ff !important;
+}
+
+.light-theme a,
+.light-theme .refresh-interval-value {
+  color: #2257c7;
+}
+
+.light-theme a:hover {
+  color: #6b3be4;
+  text-decoration: underline;
+}
+
+.light-theme .error-message {
+  background: #fff2f2;
+  color: #c62828;
+  border-left: 4px solid #e57373;
+}
+
+.light-theme .block-details-root,
+.light-theme .modal {
+  box-shadow: 0 2px 16px #e1e5ef77;
+}
+
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, var(--background-color) 0%, var(--card-background) 100%);
+  color: var(--text-color);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition: background 0.4s, color 0.4s;
+}
+
+#root, .app-container, .blockchain-explorer, .toolbar, .title, .controls, .real-time-indicator, .table-row, .table-cell, .block-details-root, .latest-blocks-container, .full-width-visualization, .modal, .visualization-title {
+  transition: background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #10111a;
+}
+
+.blockchain-explorer {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  position: relative;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+}
+
+.toolbar::before {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  border-bottom: 1.5px solid #23243a;
+}
+
+.light-theme .toolbar{
+  border: none;
+}
+
+.light-theme .toolbar::before{
+ border-bottom: 1.5px solid #0000001c;
+}
+
+
+.title {
+  font-size: 30px;
+  font-weight: 800;
+  color: #ffe8ff;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px #c678dd44;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.real-time-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  /* background-color: var(--card-background);  */
+  border: 1.5px solid #23243a;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #5b436a; /* Couleur inactive */
+  transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+  background-color: #c678dd; /* Violet actif */
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.refresh-interval-value {
+  color: #51e1ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.22s, text-shadow 0.22s;
+}
+
+a:hover, a:focus {
+  color: #ffe066;
+  text-shadow: 0 2px 10px #51e1ff77;
+  text-decoration: underline;
+  outline: none;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #c678dd 60%, #51e1ff 100%);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.22s, box-shadow 0.18s, transform 0.11s;
+  font-weight: 600;
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px #0002;
+}
+button:focus {
+  outline: 2px solid #51e1ff;
+  outline-offset: 2px;
+}
+
+button:hover {
+  background-color: #5b436a;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.latest-blocks-container {
+  margin-bottom: 30px !important;
+  padding-top: 20px !important;
+}
+
+
+.light-theme .latest-blocks-container{
+  background-color: #fffffc;
+  box-shadow: 0 6px 16px 0 #00000033, 0 1.5px 4px #0001;
+
+  /* box-shadow: none; */
+  border: none;
+}
+.latest-blocks-table {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px 0 #00000033, 0 1.5px 4px #0001;
+  /* background: var(--card-background); */
+  transition: box-shadow 0.2s;
+  border: 1.5px solid #23243a;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  background-color: #161625;
+  border-bottom: 1px solid #23243a;
+
+  padding: 12px;
+  font-weight: bold;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 12px;
+  cursor: pointer;
+  background: #14141f;
+  border-bottom: 1px solid #23243a;
+  transition: background 0.18s;
+  align-items: center;
+}
+.table-row:hover {
+  background: #2f2447cc;
+  box-shadow: 0 2px 12px #c678dd33;
+  z-index: 1;
+}
+
+.table-cell {
+  padding: 8px;
+}
+
+.test{
+
+  color: #0f3b396b
+}
+.icon-table-button {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid #23243a;
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.18s, border 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+.icon-table-button:last-child {
+  margin-right: 0;
+}
+.icon-table-button img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.new-block {
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: #5b436a;
+    color: white;
+  }
+  100% {
+    background-color: transparent;
+    color: inherit;
+  }
+}
+
+.block-details-container {
+  margin: 20px 0;
+  padding: 24px 24px 18px 24px;
+  background-color: var(--card-background);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 #00000044, 0 1.5px 4px #0001;
+  transition: box-shadow 0.22s, background 0.22s;
+}
+
+
+.detail-value {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.full-width-visualization {
+  width: 100%;
+  /* height: 100vh; */
+  /* padding: 20px; */
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.visualization-title {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.block-details-title {
+  font-size: 30px;
+  margin-bottom: 8px;
+  margin-top: 30px;
+}
+
+.network-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.highlight {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.debug-info {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.raw-data {
+  margin-top: 15px;
+}
+
+.raw-data pre {
+  color: #e2e8f0;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.error-message {
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  border-left: 4px solid #c62828;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-background);
+  color: var(--text-color);
+}
+
+@keyframes newBlockPop {
+  0% {
+    box-shadow: 0 0 0 0 #63e6b800;
+    transform: scale(1);
+  }
+  40% {
+    box-shadow: 0 0 20px 6px #63e6b8bb;
+    transform: scale(1.2);
+  }
+  80% {
+    box-shadow: 0 0 20px 2px #63e6b8aa;
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 #63e6b800;
+    transform: scale(1);
+  }
+}
+
+.node-new-block {
+  animation: newBlockPop 1.4s cubic-bezier(.22,1,.36,1) 1;
+  /* Optionnel : z-index si chevauchement */
+}
+
+.blockchain-explorer,
+.latest-blocks-container,
+.full-width-visualization,
+.mining-table-section {
+  background: #14141f;
+  border-radius: 10px;
+  box-shadow: 0 4px 32px #000a, 0 1.5px 8px #2a223e99;
+  padding: 32px 28px 24px 28px;
+  margin: 32px auto 0 auto;
+  /* max-width: 1100px; */
+  border: 1.5px solid #23243a;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+@media (max-width: 900px) {
+  .blockchain-explorer,
+  .latest-blocks-container,
+  .full-width-visualization,
+  .mining-table-section {
+    padding: 16px 6px 12px 6px;
+    margin: 18px 2px 0 2px;
+  }
+}
+
+.toolbar-button {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid #23243a;
+  border-radius: 10px;
+  padding: 8px 22px;
+  font-weight: 500;
+  font-size: 17px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  min-width: 44px;
+  justify-content: center;
+}
+.toolbar-button:first-child {
+  margin-left: 0;
+}
+.toolbar-button img,
+.toolbar-button svg {
+  display: block;
+}
+
