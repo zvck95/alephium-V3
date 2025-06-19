@@ -2,7 +2,7 @@ let socket
 let pingInterval
 
 export function connectWebSocket(onBlock) {
-  const WS_URL = 'wss://node.mainnet.alephium.org/ws'
+  const WS_URL = 'wss://node.mainnet.alephium.org/events'
   socket = new WebSocket(WS_URL)
 
   socket.onopen = () => {
