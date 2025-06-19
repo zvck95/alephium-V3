@@ -286,10 +286,9 @@ const BlockDetails = ({ block, allBlocks, watchlist = [], addToWatchlist, remove
   const deps = block.deps || [];
   const parent = block.parent || block.parentBlockHash?.[0] || null;
   const ghostUncles = block.ghostUncles || [];
-  const isConfirmed = block.mainChain !== false; // true by défaut
 
   // Relations enfants dynamiques (pour affichage)
-  // Correction : Alephium place le parent dans parentBlockHash[0] (ou parent)
+  // Correction: Alephium place le parent dans parentBlockHash[0] (ou parent)
   const children = allBlocks
     ? allBlocks.filter(b => {
       const parentHash = b.parentBlockHash?.[0] || b.parent;
@@ -428,7 +427,6 @@ const BlockDetails = ({ block, allBlocks, watchlist = [], addToWatchlist, remove
                 onClick={(e) => {
                   e.stopPropagation();
                   navigator.clipboard.writeText(block.hash);
-                  showToast('Hash copié !');
                 }}
                 className="icon-table-button"
                 title="Copier le hash"
@@ -545,7 +543,7 @@ const BlockDetails = ({ block, allBlocks, watchlist = [], addToWatchlist, remove
               }}>
               {deps.length === 0
                 ? <span style={{ color: '#888' }}>Aucune</span>
-                : deps.map((dep, idx) =>
+                : deps.map((dep) =>
                   <code
                     key={dep}
                     className="detail-value"
