@@ -68,7 +68,7 @@ npm run preview
 ```
 
 ### WebSocket temps réel
-La fonction `connectWebSocket` permet de recevoir automatiquement les nouveaux blocs via WebSocket.
+La fonction `connectWebSocket` permet de recevoir automatiquement les nouveaux blocs via WebSocket (chemin `/events`).
 ```javascript
 import { connectWebSocket } from './src/services/websocket'
 
