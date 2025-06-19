@@ -450,53 +450,16 @@ export const checkForNewBlocks = async (lastKnownHeight, callback) => {
       await Promise.all(batch.map(async ({ fromGroup, toGroup }) => {
         try {
           // Récupérer les infos de la chaîne avec gestion d'erreur
-          const [chainInfo, versionInfo] = await Promise.all([
+          const [chainInfo] = await Promise.all([
             nodeManager.executeWithFailover(provider =>
               retryWithBackoff(
                 () => provider.infos.getInfosGetChainInfo(),
                 { operationName: 'getChainInfo' }
               )
             ).catch(() => null),
-            
-            nodeManager.executeWithFailover(provider =>
-              retryWithBackoff(
-                () => provider.infos.getInfosGetVersion(),
-                { operationName: 'getVersionInfo', maxRetries: 2 }
-              )
-            ).catch(() => null)
           ]);
           
           const currentHeight = chainInfo?.currentHeight || 0;
-          const nodeVersion = versionInfo?.version || 'unknown';
-          
-          // Calculer le temps moyen entre les blocs (approximatif)
-          let averageBlockTime = 64000; // Valeur par défaut (64 secondes)
-          if (currentHeight > 10) {
-            try {
-              const recentBlocks = [];
-              for (let i = 1; i <= 10; i++) {
-                const block = await getBlockByHash(
-                  await nodeManager.executeWithFailover(provider =>
-                    provider.blockflow.getBlockflowHashes({
-                      fromGroup: 0,
-                      toGroup: 0,
-                      height: currentHeight - i
-                    })
-                  )
-                );
-                if (block?.timestamp) {
-                  recentBlocks.push(block);
-                }
-              }
-              
-              if (recentBlocks.length > 1) {
-                const timeDiff = recentBlocks[0].timestamp - recentBlocks[recentBlocks.length - 1].timestamp;
-                averageBlockTime = Math.floor(timeDiff / (recentBlocks.length - 1));
-              }
-            } catch (e) {
-              console.error('Error calculating average block time:', e);
-            }
-          }
           
           // Récupérer les hauteurs des nouveaux blocs
           const heights = [];

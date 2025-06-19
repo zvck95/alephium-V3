@@ -9,7 +9,11 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: (() => {
+        const fixed = { ...globals.browser }
+        delete fixed['AudioWorkletGlobalScope ']
+        return fixed
+      })(),
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },

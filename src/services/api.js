@@ -3,7 +3,7 @@
 const BASE_URL = '/api';
 
 // Récupère les derniers blocs (limit par défaut à 10)
-export async function getLatestBlocks(limit = BLOCK_FETCH_LIMIT) {
+export async function getLatestBlocks(limit = 10) {
   const response = await fetch(`${BASE_URL}/blocks?limit=${limit}`);
   if (!response.ok) throw new Error(`Erreur ${response.status}`);
   const result = await response.json();
