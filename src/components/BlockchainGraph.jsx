@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import * as d3 from 'd3';
 
 // Constantes de configuration
@@ -19,8 +19,9 @@ const THEME = {
     3: { color: '#e17055', gradient: ['#e17055', '#fab1a0'] },
   },
   links: {
-    parent: { color: '#6c5ce7', width: 1.5, opacity: 0.8 },
-    child: { color: '#b5c7e1', width: 0.5, opacity: 0.4 },
+    parent: { color: '#6c5ce7', width: 2, opacity: 0.9 },
+    crossDep: { color: '#95a5a6', width: 1, opacity: 0.6 },
+    sameDep: { color: '#ffa502', width: 1, opacity: 0.6 },
   },
   node: {
     selected: { fill: '#83d1ff', stroke: '#4fa8e0' },
@@ -144,7 +145,6 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
   const svgRef = useRef();
   const wrapperRef = useRef();
   const [autoFollow, setAutoFollow] = React.useState(true);
-  const [hoveredBlock, setHoveredBlock] = React.useState(null);
   const [visibleChains, setVisibleChains] = React.useState({ 0: true, 1: true, 2: true, 3: true });
   const [tooltip, setTooltip] = React.useState({ visible: false, x: 0, y: 0, content: null });
 
@@ -158,8 +158,6 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
   
   // Gestion du survol des blocs
   const handleNodeMouseOver = (event, d) => {
-    setHoveredBlock(d);
-    
     // Mise à jour du style du nœud survolé
     d3.select(event.currentTarget)
       .select('rect')
@@ -189,8 +187,6 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
   };
   
   const handleNodeMouseOut = (event) => {
-    setHoveredBlock(null);
-    
     // Réinitialisation du style du nœud
     d3.select(event.currentTarget)
       .select('rect')
@@ -378,7 +374,20 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M 0 0 L 10 5 L 0 10 z')
-      .attr('fill', '#636e72');
+      .attr('fill', THEME.links.crossDep.color);
+
+    // Flèche pour les dépendances sur la même chaîne
+    defs.append('marker')
+      .attr('id', 'arrowhead-same')
+      .attr('viewBox', '0 0 10 10')
+      .attr('refX', 15)
+      .attr('refY', 3)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+      .attr('fill', THEME.links.sameDep.color);
     
     // Création des dégradés pour chaque chaîne
     Object.entries(THEME.chains).forEach(([chainId, chain]) => {
@@ -449,16 +458,19 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
     // 2. Liens de dépendances croisées (pointillés fins, gris)
     const crossLinks = linksGroup
       .selectAll('.cross-link')
-      .data(links.filter(link => !link.isParent && !link.isSameChain), 
-            d => `${d.source.hash}-${d.target.hash}`);
+      .data(
+        links.filter(link => !link.isParent && !link.isSameChain),
+        d => `${d.source.hash}-${d.target.hash}`
+      );
 
-    crossLinks.enter()
+    crossLinks
+      .enter()
       .append('line')
       .attr('class', 'cross-link')
-      .attr('stroke', '#95a5a6')
-      .attr('stroke-width', 1)
+      .attr('stroke', THEME.links.crossDep.color)
+      .attr('stroke-width', THEME.links.crossDep.width)
       .attr('stroke-dasharray', '3,2')
-      .attr('opacity', 0.6)
+      .attr('opacity', THEME.links.crossDep.opacity)
       .attr('marker-end', 'url(#arrowhead-cross)')
       .merge(crossLinks)
       .attr('x1', d => d.source.x)
@@ -469,16 +481,20 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
     // 3. Liens de même chaîne (non parents) - plus discrets
     const sameChainLinks = linksGroup
       .selectAll('.same-chain-link')
-      .data(links.filter(link => !link.isParent && link.isSameChain), 
-            d => `${d.source.hash}-${d.target.hash}`);
+      .data(
+        links.filter(link => !link.isParent && link.isSameChain),
+        d => `${d.source.hash}-${d.target.hash}`
+      );
 
-    sameChainLinks.enter()
+    sameChainLinks
+      .enter()
       .append('line')
       .attr('class', 'same-chain-link')
-      .attr('stroke', '#bdc3c7')
-      .attr('stroke-width', 1)
+      .attr('stroke', THEME.links.sameDep.color)
+      .attr('stroke-width', THEME.links.sameDep.width)
       .attr('stroke-dasharray', '2,2')
-      .attr('opacity', 0.4)
+      .attr('opacity', THEME.links.sameDep.opacity)
+      .attr('marker-end', 'url(#arrowhead-same)')
       .merge(sameChainLinks)
       .attr('x1', d => d.source.x)
       .attr('y1', d => d.source.y)
@@ -747,8 +763,12 @@ const BlockchainGraph = ({ blocks, onBlockSelect, newBlocks, selectedBlock }) =>
             <span>Lien parent</span>
           </div>
           <div style={legendItemStyle}>
-            <div style={{ ...legendColorStyle('transparent', '#ff4757'), borderStyle: 'dashed' }} />
-            <span style={{ color: '#ff4757' }}>Lien enfant</span>
+            <div style={{ ...legendColorStyle('transparent', THEME.links.crossDep.color), borderStyle: 'dashed' }} />
+            <span style={{ color: THEME.links.crossDep.color }}>Dépendance croisée</span>
+          </div>
+          <div style={legendItemStyle}>
+            <div style={{ ...legendColorStyle('transparent', THEME.links.sameDep.color), borderStyle: 'dashed' }} />
+            <span style={{ color: THEME.links.sameDep.color }}>Dépendance même chaîne</span>
           </div>
           <div style={legendItemStyle}>
             <div style={legendColorStyle('#ff7675', '#d63031')} />

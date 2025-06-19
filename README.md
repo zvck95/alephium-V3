@@ -67,6 +67,19 @@ npm run build
 npm run preview
 ```
 
+### WebSocket temps réel
+La fonction `connectWebSocket` permet de recevoir automatiquement les nouveaux blocs via WebSocket.
+```javascript
+import { connectWebSocket } from './src/services/websocket'
+
+connectWebSocket((block) => {
+  console.log('Nouveau bloc', block)
+})
+```
+
+### Graphique des blocs
+La vue `BlockchainGraph` affiche maintenant clairement les liens entre parents et dépendances. Les flèches bleues représentent la relation parent → enfant. Les traits pointillés gris ou orange mettent en valeur les dépendances croisées ou sur la même chaîne.
+
 ## API Alephium
 
 ### Configuration
@@ -100,6 +113,6 @@ interface Block {
 
 ## Roadmap
 - [ ] Amélioration de la visualisation des transactions
-- [ ] Support des websockets pour les mises à jour en temps réel
+- [x] Support des websockets pour les mises à jour en temps réel
 - [ ] Ajout de filtres avancés pour la recherche de blocs
 - [ ] Optimisation des performances du cache

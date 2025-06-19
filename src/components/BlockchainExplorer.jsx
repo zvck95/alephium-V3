@@ -6,6 +6,7 @@ import StarIcon from '../assets/StarIcon.svg';
 
 import { getLatestBlocks, getBlockDetails } from '../services/api';
 import BlockchainGraph from './BlockchainGraph';
+import { connectWebSocket, closeWebSocket } from '../services/websocket';
 
 const BLOCK_FETCH_LIMIT = 100;
 const BLOCKS_TO_ENRICH = 20; // Nombre de blocs enrichis avec blockDeps pour le graph
@@ -73,16 +74,17 @@ const BlockchainExplorer = () => {
   useEffect(() => {
     try {
       localStorage.setItem('alfx_watchlist', JSON.stringify(watchlist));
-    } catch { }
+    } catch (err) {
+      console.error(err);
+    }
   }, [watchlist]);
 
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedBlock, setSelectedBlock] = useState(null);
-  const [refreshInterval, setRefreshInterval] = useState(2); // 2 secondes par défaut
-  const [showRawData, setShowRawData] = useState(false);
-  const [lastBlockHeight, setLastBlockHeight] = useState(0);
+  const [refreshInterval] = useState(2); // 2 secondes par défaut
+  const [showRawData] = useState(false);
   const [newBlocks, setNewBlocks] = useState([]);
   const [realTimeIndicator, setRealTimeIndicator] = useState(false);
   const [highlightedBlocks, setHighlightedBlocks] = useState([]);
@@ -168,8 +170,7 @@ const BlockchainExplorer = () => {
       setBlocks(updated);
       blocksRef.current = updated;
       if (updated.length > 0) {
-        const max = Math.max(...updated.map(b => b.height));
-        setLastBlockHeight(max);
+        // last block height previously used here
       }
       setError(null);
     } catch (err) {
@@ -188,6 +189,13 @@ const BlockchainExplorer = () => {
 
   useEffect(() => {
     fetchBlocksWithDeps();
+  }, []);
+
+  useEffect(() => {
+    connectWebSocket((block) => {
+      setBlocks(prev => mergeAndSortBlocks([block], prev));
+    });
+    return () => closeWebSocket();
   }, []);
 
   // Polling automatique toutes les X secondes

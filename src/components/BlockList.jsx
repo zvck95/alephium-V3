@@ -10,12 +10,6 @@ const CHAIN_COLORS = {
   3: '#e17055'   // Orange
 };
 
-// Formatage du nombre avec séparateur de milliers
-const formatNumber = (num) => {
-  if (!num && num !== 0) return 'N/A';
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-};
-
 // Composant de badge pour les indicateurs
 const Badge = ({ children, color, icon }) => (
   <span style={{
